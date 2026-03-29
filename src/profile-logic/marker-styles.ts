@@ -94,6 +94,11 @@ const markerStyles: { readonly [styleName: string]: MarkerStyle } = {
     _background: colors.ORANGE_70,
     top: 6,
   },
+  SvmTransaction: {
+    ...defaultStyle,
+    _background: colors.TEAL_50,
+    top: 6,
+  },
   'requestAnimationFrame callbacks': {
     ...defaultStyle,
     _background: colors.ORANGE_70,
@@ -160,6 +165,14 @@ const markerStyles: { readonly [styleName: string]: MarkerStyle } = {
     ...defaultStyle,
     _background: 'rgba(0,200,0,0.5)',
   },
+  ReplaySlot: {
+    ...defaultStyle,
+    _background: 'rgba(0,200,0,0.5)',
+  },
+  TurbineSlot: {
+    ...defaultStyle,
+    _background: 'rgba(0,200,0,0.5)',
+  },
   LayerCompositorGPU: {
     ...defaultStyle,
     _background: 'rgba(0,200,0,0.5)',
@@ -173,6 +186,20 @@ const markerStyles: { readonly [styleName: string]: MarkerStyle } = {
     _background: ['hsl(347, 100%, 60%)', 'hsl(347, 75%, 40%)'],
     _borderLeft: [colors.RED_50, colors.RED_70],
     _borderRight: [colors.RED_50, colors.RED_70],
+    squareCorners: true,
+  },
+  PageFault: {
+    ...defaultStyle,
+    _background: 'hsl(347, 100%, 60%)',
+    _borderLeft: colors.RED_50,
+    _borderRight: colors.RED_50,
+    squareCorners: true,
+  },
+  BlockIO: {
+    ...defaultStyle,
+    _background: 'hsl(347, 100%, 60%)',
+    _borderLeft: colors.RED_50,
+    _borderRight: colors.RED_50,
     squareCorners: true,
   },
   // BHR markers are displayed in the timeline only if jank markers are

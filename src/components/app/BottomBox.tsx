@@ -200,6 +200,7 @@ class BottomBoxImpl extends React.PureComponent<Props> {
       assemblyViewCode,
       globalAddressTimings,
     } = this.props;
+    console.log('wtf', this.props);
     const sourceCode =
       sourceViewCode && sourceViewCode.type === 'AVAILABLE'
         ? sourceViewCode.code
@@ -251,7 +252,9 @@ class BottomBoxImpl extends React.PureComponent<Props> {
       >
         <div className="bottom-box-pane">
           <div className="bottom-box-bar">
-            <h3 className="bottom-box-title">{path ?? '(no source file)'}</h3>
+            <h3 className="bottom-box-title">
+              {path ?? '(no source file lmao)'}
+            </h3>
             {assemblyViewIsOpen ? null : trailingHeaderButtons}
           </div>
           <div className="bottom-sourceview-wrapper">

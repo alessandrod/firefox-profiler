@@ -38,14 +38,14 @@ import './NetworkMarker.css';
 /* The labels are for the duration between _this_ label and the next label. */
 const HUMAN_LABEL_FOR_PHASE: Record<NetworkPhaseName, string> = {
   startTime: 'Waiting for socket thread',
-  domainLookupStart: 'DNS request',
-  domainLookupEnd: 'After DNS request',
+  domainLookupStart: 'sigverify',
+  domainLookupEnd: 'scheduler buffer',
   connectStart: 'TCP connection',
   tcpConnectEnd: 'After TCP connection',
   secureConnectionStart: 'Establishing TLS session',
   connectEnd: 'Waiting for HTTP request',
-  requestStart: 'HTTP request and waiting for response',
-  responseStart: 'HTTP response',
+  requestStart: 'scheduler buffer',
+  responseStart: 'execution',
   responseEnd: 'Waiting for main thread',
   endTime: 'End',
 };
@@ -57,7 +57,7 @@ const OPACITY_FOR_PHASE: Record<NetworkPhaseName, number> = {
   connectStart: 0.5,
   tcpConnectEnd: 0.5,
   secureConnectionStart: 0.5,
-  connectEnd: 0.5,
+  connectEnd: 0.65,
   requestStart: 0.75,
   responseStart: 1,
   responseEnd: 0,
@@ -130,6 +130,9 @@ export class TooltipNetworkMarkerPhases extends React.PureComponent<Props> {
 
     for (let i = 1; i < properties.length; i++) {
       const { phase: previousProperty, value: startValue } = properties[i - 1];
+      if (i == 1) {
+        console.log('first phase', previousProperty, startValue);
+      }
       const { value: endValue } = properties[i];
       const phaseDuration = endValue - startValue;
       const startPosition = startValue - startTime;
@@ -271,6 +274,8 @@ export function getNetworkMarkerDetails(
   const markerColorClass = getColorClassNameForMimeType(mimeType);
   const details = [];
 
+  console.log(payload);
+
   details.push(
     <TooltipDetail label="Status" key="Network-Status">
       {getHumanReadableDataStatus(payload.status)}
@@ -285,14 +290,14 @@ export function getNetworkMarkerDetails(
     );
   }
 
-  details.push(
-    <TooltipDetail label="Cache" key="Network-Cache">
-      {payload.cache}
-    </TooltipDetail>,
-    <TooltipDetail label="URL" key="Network-URL">
-      <span className="tooltipDetailsUrl">{payload.URI}</span>
-    </TooltipDetail>
-  );
+  // details.push(
+  //   <TooltipDetail label="Cache" key="Network-Cache">
+  //     {payload.cache}
+  //   </TooltipDetail>,
+  //   <TooltipDetail label="URL" key="Network-URL">
+  //     <span className="tooltipDetailsUrl">{payload.URI}</span>
+  //   </TooltipDetail>
+  // );
 
   if (payload.RedirectURI) {
     details.push(
@@ -308,27 +313,27 @@ export function getNetworkMarkerDetails(
     </TooltipDetail>
   );
 
-  if (payload.priorityHeader) {
-    details.push(
-      <TooltipDetail label="Priority Header" key="Network-Priority-Header">
-        {payload.priorityHeader}
-      </TooltipDetail>
-    );
-  }
+  // if (payload.priorityHeader) {
+  //   details.push(
+  //     <TooltipDetail label="Priority Header" key="Network-Priority-Header">
+  //       {payload.priorityHeader}
+  //     </TooltipDetail>
+  //   );
+  // }
 
-  if (mimeType) {
-    details.push(
-      <TooltipDetail label={mimeTypeLabel} key={'Network-' + mimeTypeLabel}>
-        <div className="tooltipNetworkMimeType">
-          <span
-            className={`tooltipNetworkMimeTypeSwatch colored-square ${markerColorClass}`}
-            title={mimeType}
-          />
-          {mimeType}
-        </div>
-      </TooltipDetail>
-    );
-  }
+  // if (mimeType) {
+  //   details.push(
+  //     <TooltipDetail label={mimeTypeLabel} key={'Network-' + mimeTypeLabel}>
+  //       <div className="tooltipNetworkMimeType">
+  //         <span
+  //           className={`tooltipNetworkMimeTypeSwatch colored-square ${markerColorClass}`}
+  //           title={mimeType}
+  //         />
+  //         {mimeType}
+  //       </div>
+  //     </TooltipDetail>
+  //   );
+  // }
 
   if (payload.isPrivateBrowsing) {
     details.push(

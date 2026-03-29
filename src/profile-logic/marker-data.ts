@@ -56,6 +56,7 @@ import type {
   ThreadIndex,
   Profile,
 } from 'firefox-profiler/types';
+import { addEventDelayTracksForThreads } from './tracks';
 
 /**
  * Jank instances are created from responsiveness values. Responsiveness is a profiler
@@ -659,7 +660,6 @@ export function deriveMarkersFromRawMarkerTable(
           // Usually the start marker is very small. It's emitted mostly to know
           // about the start of the request. But most of the interesting bits are
           // in the stop marker.
-
           const ensureMessage =
             'Network markers are assumed to have a start and end time.';
           if (data.status === 'STATUS_START') {
@@ -677,10 +677,18 @@ export function deriveMarkersFromRawMarkerTable(
               // We know this startIndex points to a Network marker.
               const startData = rawMarkers.data[startIndex] as NetworkPayload;
 
-              const startStartTime = ensureExists(
+              // console.log("LMAOOO", endData);
+
+              let startStartTime = ensureExists(
                 rawMarkers.startTime[startIndex],
                 ensureMessage
               );
+              // HACK
+              if (startStartTime == 0 || endData.domainLookupStart == 0) {
+                console.log("HACKING NETWORK MARKER TIMES", endData);
+                startStartTime = endData.domainLookupStart = endData.domainLookupEnd;
+                addEventDelayTracksForThreads.patched = true;
+              }
               const endStartTime = ensureExists(maybeStartTime, ensureMessage);
               const endEndTime = ensureExists(maybeEndTime, ensureMessage);
 
@@ -960,7 +968,7 @@ export function deriveMarkersFromRawMarkerTable(
       const start = ensureExists(
         rawMarkers.startTime[startIndex],
         'Encountered a marker without a startTime. Eventually this needs to be handled ' +
-          'for phase-style markers.'
+        'for phase-style markers.'
       );
       addMarker([startIndex], {
         start,

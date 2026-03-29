@@ -442,7 +442,7 @@ export class NetworkChartRow extends React.PureComponent<
     const { networkPayload } = this.props;
     const mimeType =
       networkPayload.contentType === undefined ||
-      networkPayload.contentType === null
+        networkPayload.contentType === null
         ? guessMimeTypeFromNetworkMarker(networkPayload)
         : networkPayload.contentType;
     return getColorClassNameForMimeType(mimeType);
@@ -497,12 +497,12 @@ export class NetworkChartRow extends React.PureComponent<
         onMouseLeave={this._hoverOut}
         onMouseDown={this._onMouseDown}
         aria-selected={isSelected}
-        aria-label={marker.name}
+        aria-label={marker.data.name}
         role="option"
         id={`networkChartRowItem-${markerIndex}`}
       >
         <div className="networkChartRowItemLabel">
-          {this._splitsURI(marker.name)}
+          {this._splitsURI(marker.data.name)}
         </div>
         <NetworkChartRowBar
           marker={marker}

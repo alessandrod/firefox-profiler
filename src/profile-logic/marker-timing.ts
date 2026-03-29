@@ -116,7 +116,7 @@ export function getMarkerTiming(
     // line without this special handling.
     const markerLineName =
       marker.data && marker.data.type === 'Network'
-        ? 'Network Requests'
+        ? 'Transactions'
         : marker.name;
 
     const emptyTiming = ({
@@ -222,10 +222,10 @@ export function getMarkerTiming(
 
     // Put network requests at the end of the Network category.
     if (a.bucket === 'Network') {
-      if (a.name === 'Network Requests') {
+      if (a.name === 'Transactions') {
         return 1;
       }
-      if (b.name === 'Network Requests') {
+      if (b.name === 'Transactions') {
         return -1;
       }
     }

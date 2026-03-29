@@ -782,7 +782,7 @@ MenuButtons--publish--error-while-compressing = Error while compressing, try unc
 ## This is used in the network chart.
 
 NetworkSettings--panel-search =
-    .label = Filter Networks:
+    .label = Filter Transactions:
     .title = Only display network requests that match a certain name
 
 ## Timestamp formatting primitive
@@ -943,7 +943,7 @@ TabBar--flame-graph-tab = Flame Graph
 TabBar--stack-chart-tab = Stack Chart
 TabBar--marker-chart-tab = Marker Chart
 TabBar--marker-table-tab = Marker Table
-TabBar--network-tab = Network
+TabBar--network-tab = Transactions
 TabBar--js-tracer-tab = JS Tracer
 
 ## TabSelectorMenu

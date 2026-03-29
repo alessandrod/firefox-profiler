@@ -192,7 +192,8 @@ class TimelineTrackThreadImpl extends PureComponent<Props> {
     } = this.props;
 
     const processType = filteredThread.processType;
-    const displayJank = processType !== 'plugin';
+    // const displayJank = processType !== 'plugin';
+    const displayJank = false;
     const displayMarkers =
       (filteredThread.showMarkersInTimeline ||
         filteredThread.name === 'GeckoMain' ||

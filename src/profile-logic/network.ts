@@ -16,20 +16,20 @@ import type {
 export const PRECONNECT_PHASES_IN_ORDER: NetworkPhaseName[] = [
   'domainLookupStart',
   'domainLookupEnd',
-  'connectStart',
-  'tcpConnectEnd',
-  'secureConnectionStart',
-  'connectEnd',
+  // 'connectStart',
+  // 'tcpConnectEnd',
+  // 'secureConnectionStart',
+  // 'connectEnd',
 ];
 
 /* A marker without a preconnect phase may contain all these properties. */
 export const ALL_NETWORK_PHASES_IN_ORDER: NetworkPhaseName[] = [
-  'startTime',
+  // 'startTime',
   ...PRECONNECT_PHASES_IN_ORDER,
-  'requestStart',
+  // 'requestStart',
   'responseStart',
   'responseEnd',
-  'endTime',
+  // 'endTime',
 ];
 
 /* For a marker with a preconnect phase, the second displayed diagram may only
@@ -74,7 +74,7 @@ export function getHumanReadableDataStatus(status: NetworkStatus): string {
     case 'STATUS_START':
       return 'Waiting for response';
     case 'STATUS_STOP':
-      return 'Response received';
+      return 'executed';
     case 'STATUS_REDIRECT':
       return 'Redirecting request';
     case 'STATUS_CANCEL':

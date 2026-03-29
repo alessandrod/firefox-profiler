@@ -1309,7 +1309,7 @@ export function getLocalTrackName(
     case 'thread':
       return getFriendlyThreadName(threads, threads[localTrack.threadIndex]);
     case 'network':
-      return 'Network';
+      return 'Transactions';
     case 'counter': {
       const counter = counters[localTrack.counterIndex];
       return counter.display.label || counter.name;
