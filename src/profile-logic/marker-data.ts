@@ -56,7 +56,6 @@ import type {
   ThreadIndex,
   Profile,
 } from 'firefox-profiler/types';
-import { addEventDelayTracksForThreads } from './tracks';
 
 /**
  * Jank instances are created from responsiveness values. Responsiveness is a profiler
@@ -683,11 +682,14 @@ export function deriveMarkersFromRawMarkerTable(
                 rawMarkers.startTime[startIndex],
                 ensureMessage
               );
-              // HACK
-              if (startStartTime == 0 || endData.domainLookupStart == 0) {
-                console.log("HACKING NETWORK MARKER TIMES", endData);
-                startStartTime = endData.domainLookupStart = endData.domainLookupEnd;
-                addEventDelayTracksForThreads.patched = true;
+              if (startStartTime === 0 || endData.domainLookupStart === 0) {
+                const fallbackStartTime =
+                  endData.domainLookupEnd ?? endData.domainLookupStart;
+                if (fallbackStartTime !== undefined) {
+                  startStartTime = fallbackStartTime;
+                  endData.domainLookupStart = fallbackStartTime;
+                  endData.domainLookupEnd = fallbackStartTime;
+                }
               }
               const endStartTime = ensureExists(maybeStartTime, ensureMessage);
               const endEndTime = ensureExists(maybeEndTime, ensureMessage);

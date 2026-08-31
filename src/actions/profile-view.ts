@@ -277,7 +277,7 @@ function getInformationFromTrackReference(
             pid,
             localTrackIndex: null,
             // Move to a relevant thread-based tab when the previous tab was
-            // the network chart.
+            // a custom thread-specific chart.
             relatedTab:
               getSelectedTab(state) === 'network-chart'
                 ? getLastVisibleThreadTabSlug(state)
@@ -320,7 +320,7 @@ function getInformationFromTrackReference(
             threadIndex: localTrack.threadIndex,
             relatedThreadIndex: localTrack.threadIndex,
             // Move to a relevant thread-based tab when the previous tab was
-            // the network chart.
+            // a custom thread-specific chart.
             relatedTab:
               getSelectedTab(state) === 'network-chart'
                 ? getLastVisibleThreadTabSlug(state)

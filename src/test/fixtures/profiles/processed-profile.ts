@@ -61,6 +61,12 @@ import type {
   Pid,
   MarkerSchema,
   MixedObject,
+  ShredKind,
+  ShredFrontierPayload,
+  ShredGapPayload,
+  ShredRecvRangePayload,
+  ShredSource,
+  ShredTurbineLayer,
 } from 'firefox-profiler/types';
 import { FrameFlag } from 'firefox-profiler/types';
 import {
@@ -72,6 +78,10 @@ import {
   computeTimeColumnForRawSamplesTable,
 } from '../../../profile-logic/profile-data';
 import { markerSchemaForTests } from './marker-schema';
+import {
+  REAL_SHRED_SLOT_WINDOWS,
+  type RealShredSlotWindowDefinition,
+} from './shred-heatmap-fixture';
 import { GlobalDataCollector } from 'firefox-profiler/profile-logic/global-data-collector';
 import { getVisualMetrics } from './gecko-profile';
 
@@ -1315,6 +1325,178 @@ export function getNetworkTrackProfile() {
     ],
   ]);
 
+  return profile;
+}
+
+type ShredRecvRangeDefinition = Readonly<{
+  time: Milliseconds;
+  startIndex: number;
+  endIndex: number;
+  shredKind?: ShredKind;
+  source?: ShredSource;
+  turbineLayer?: ShredTurbineLayer;
+}>;
+
+type ShredFrontierDefinition = Readonly<{
+  time: Milliseconds;
+  highestReceived: number;
+  consumed: number;
+}>;
+
+type ShredGapDefinition = Readonly<{
+  start: Milliseconds;
+  end: Milliseconds;
+  startIndex: number;
+  endIndex: number;
+}>;
+
+type ShredSlotDefinition = Readonly<{
+  slot: number;
+  recvRanges: ReadonlyArray<ShredRecvRangeDefinition>;
+  frontierSamples: ReadonlyArray<ShredFrontierDefinition>;
+  gaps: ReadonlyArray<ShredGapDefinition>;
+}>;
+
+function _materializeRealShredSlotDefinition(
+  fixture: RealShredSlotWindowDefinition
+): ShredSlotDefinition {
+  const { slot, startTime } = fixture;
+  return {
+    slot,
+    recvRanges: fixture.recvRanges.map((recvRange) => ({
+      ...recvRange,
+      time: recvRange.time + startTime,
+    })),
+    frontierSamples: fixture.frontierSamples.map((frontierSample) => ({
+      ...frontierSample,
+      time: frontierSample.time + startTime,
+    })),
+    gaps: fixture.gaps.map((gap) => ({
+      ...gap,
+      start: gap.start + startTime,
+      end: gap.end + startTime,
+    })),
+  };
+}
+
+function _getShredGapMarkerName(
+  slot: number,
+  startIndex: number,
+  endIndex: number
+): string {
+  return `ShredGap ${slot} ${startIndex}-${endIndex}`;
+}
+
+function _getShredGapRawMarkers(
+  slot: number,
+  gap: ShredGapDefinition
+): TestDefinedRawMarker[] {
+  const payload: ShredGapPayload = {
+    type: 'ShredGap',
+    slot,
+    startIndex: gap.startIndex,
+    endIndex: gap.endIndex,
+  };
+  const name = _getShredGapMarkerName(slot, gap.startIndex, gap.endIndex);
+  return [
+    {
+      name,
+      startTime: gap.start,
+      endTime: null,
+      phase: INTERVAL_START,
+      data: payload,
+    },
+    {
+      name,
+      startTime: null,
+      endTime: gap.end,
+      phase: INTERVAL_END,
+      data: payload,
+    },
+  ];
+}
+
+function _getShredRawMarkers(
+  slotDefinitions: ReadonlyArray<ShredSlotDefinition>
+): TestDefinedRawMarker[] {
+  const rawMarkers: TestDefinedRawMarker[] = [];
+
+  for (const slotDefinition of slotDefinitions) {
+    for (const recvRange of slotDefinition.recvRanges) {
+      const payload: ShredRecvRangePayload = {
+        type: 'ShredRecvRange',
+        slot: slotDefinition.slot,
+        startIndex: recvRange.startIndex,
+        endIndex: recvRange.endIndex,
+        source: recvRange.source ?? 'turbine',
+        shredKind: recvRange.shredKind ?? 'data',
+        turbineLayer: recvRange.turbineLayer ?? '',
+      };
+      rawMarkers.push({
+        name: `ShredRecvRange ${slotDefinition.slot}`,
+        startTime: recvRange.time,
+        endTime: null,
+        phase: INSTANT,
+        data: payload,
+      });
+    }
+
+    for (const frontierSample of slotDefinition.frontierSamples) {
+      const payload: ShredFrontierPayload = {
+        type: 'ShredFrontier',
+        slot: slotDefinition.slot,
+        highestReceived: frontierSample.highestReceived,
+        consumed: frontierSample.consumed,
+      };
+      rawMarkers.push({
+        name: `ShredFrontier ${slotDefinition.slot}`,
+        startTime: frontierSample.time,
+        endTime: null,
+        phase: INSTANT,
+        data: payload,
+      });
+    }
+
+    for (const gap of slotDefinition.gaps) {
+      rawMarkers.push(..._getShredGapRawMarkers(slotDefinition.slot, gap));
+    }
+  }
+
+  rawMarkers.sort(
+    (a, b) =>
+      ensureExists(
+        a.startTime ?? a.endTime,
+        'Expected shred marker time'
+      ) -
+        ensureExists(
+          b.startTime ?? b.endTime,
+          'Expected shred marker time'
+        ) ||
+      a.phase - b.phase
+  );
+
+  return rawMarkers;
+}
+
+export function getShredTrackProfile(): Profile {
+  const profile = getEmptyProfile();
+  profile.meta.markerSchema = markerSchemaForTests;
+
+  const thread = getEmptyThread({
+    name: 'window_service',
+    processName: 'agave',
+    pid: '111',
+    tid: 0,
+    isMainThread: true,
+    showMarkersInTimeline: true,
+  });
+
+  const slotDefinitions = REAL_SHRED_SLOT_WINDOWS.map(
+    _materializeRealShredSlotDefinition
+  );
+
+  addRawMarkersToThread(thread, profile.shared, _getShredRawMarkers(slotDefinitions));
+  profile.threads = [thread];
   return profile;
 }
 

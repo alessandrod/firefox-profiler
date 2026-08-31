@@ -415,6 +415,9 @@ export function getQueryStringFromUrlState(urlState: UrlState): string {
         urlState.profileSpecific.networkSearchString || undefined;
       // TODO: Add support for query.marker
       break;
+    case 'shred-heatmap':
+      query = baseQuery;
+      break;
     case 'js-tracer': {
       query = baseQuery as JsTracerQueryShape;
       query.summary = urlState.profileSpecific.showJsTracerSummary

@@ -12,6 +12,7 @@ import {
   getProfileWithJsTracerEvents,
   getMergedProfileFromTextSamples,
   getProfileWithUnbalancedNativeAllocations,
+  getShredTrackProfile,
 } from '../fixtures/profiles/processed-profile';
 import {
   finishRawSamplesTableBuilder,
@@ -49,6 +50,14 @@ describe('getUsefulTabs', function () {
       'marker-table',
       'js-tracer',
     ]);
+  });
+
+  it('shows the shred heatmap when shred markers are present in the thread', function () {
+    const profile = getShredTrackProfile();
+    const { getState } = storeWithProfile(profile);
+    expect(selectedThreadSelectors.getUsefulTabs(getState())).toContain(
+      'shred-heatmap'
+    );
   });
 
   it('shows only the call tree when a diffing track is selected', function () {

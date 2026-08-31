@@ -266,15 +266,10 @@ export function getNetworkMarkerDetails(
   payload: NetworkPayload
 ): TooltipDetailComponent[] {
   let mimeType = payload.contentType;
-  let mimeTypeLabel = 'MIME type';
   if (mimeType === undefined || mimeType === null) {
     mimeType = guessMimeTypeFromNetworkMarker(payload);
-    mimeTypeLabel = 'Guessed MIME type';
   }
-  const markerColorClass = getColorClassNameForMimeType(mimeType);
   const details = [];
-
-  console.log(payload);
 
   details.push(
     <TooltipDetail label="Status" key="Network-Status">

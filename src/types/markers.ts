@@ -826,6 +826,34 @@ export type MediaSampleMarkerPayload = {
   sampleEndTimeUs: Microseconds;
 };
 
+export type ShredSource = 'normal' | 'turbine' | 'repair' | 'recovered';
+export type ShredKind = 'data' | 'code';
+export type ShredTurbineLayer = 'root' | 'l1' | 'l2' | 'l3';
+
+export type ShredRecvRangePayload = {
+  type: 'ShredRecvRange';
+  slot: number;
+  startIndex: number;
+  endIndex: number;
+  source: ShredSource;
+  shredKind: ShredKind;
+  turbineLayer?: ShredTurbineLayer | '';
+};
+
+export type ShredFrontierPayload = {
+  type: 'ShredFrontier';
+  slot: number;
+  highestReceived: number;
+  consumed: number;
+};
+
+export type ShredGapPayload = {
+  type: 'ShredGap';
+  slot: number;
+  startIndex: number;
+  endIndex: number;
+};
+
 /**
  * This type is generated on the Firefox Profiler side, and doesn't come from Gecko.
  */
@@ -880,6 +908,9 @@ export type MarkerPayload =
   | PrefMarkerPayload
   | IPCMarkerPayload
   | MediaSampleMarkerPayload
+  | ShredRecvRangePayload
+  | ShredFrontierPayload
+  | ShredGapPayload
   | JankPayload
   | BrowsertimeMarkerPayload
   | NoPayloadUserData
@@ -905,6 +936,9 @@ export type MarkerPayload_Gecko =
   | PrefMarkerPayload
   | IPCMarkerPayload_Gecko
   | MediaSampleMarkerPayload
+  | ShredRecvRangePayload
+  | ShredFrontierPayload
+  | ShredGapPayload
   | NoPayloadUserData
   | UrlMarkerPayload
   // The following payloads come in with a stack property. During the profile processing

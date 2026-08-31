@@ -14,6 +14,7 @@ import { MarkerTable } from 'firefox-profiler/components/marker-table';
 import { StackChart } from 'firefox-profiler/components/stack-chart/';
 import { MarkerChart } from 'firefox-profiler/components/marker-chart/';
 import { NetworkChart } from 'firefox-profiler/components/network-chart/';
+import { ShredHeatmap } from 'firefox-profiler/components/shred-heatmap/';
 import { FlameGraph } from 'firefox-profiler/components/flame-graph/';
 import { JsTracer } from 'firefox-profiler/components/js-tracer/';
 import { selectSidebar } from 'firefox-profiler/components/sidebar';
@@ -127,6 +128,7 @@ class ProfileViewerImpl extends PureComponent<Props> {
                 'marker-chart': <MarkerChart />,
                 'marker-table': <MarkerTable />,
                 'network-chart': <NetworkChart />,
+                'shred-heatmap': <ShredHeatmap />,
                 'js-tracer': <JsTracer />,
               }[selectedTab]
             }

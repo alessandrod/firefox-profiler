@@ -14,6 +14,7 @@ export const tabsWithTitleL10nId = {
   'marker-chart': 'TabBar--marker-chart-tab',
   'marker-table': 'TabBar--marker-table-tab',
   'network-chart': 'TabBar--network-tab',
+  'shred-heatmap': 'TabBar--shreds-tab',
   'js-tracer': 'TabBar--js-tracer-tab',
 };
 

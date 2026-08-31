@@ -20,6 +20,7 @@ export function selectSidebar(
     'marker-chart': null,
     'marker-table': MarkerSidebar, // MarkerSidebar
     'network-chart': null,
+    'shred-heatmap': null,
     'js-tracer': null,
   }[selectedTab];
 }

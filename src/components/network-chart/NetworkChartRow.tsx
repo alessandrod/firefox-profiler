@@ -497,12 +497,12 @@ export class NetworkChartRow extends React.PureComponent<
         onMouseLeave={this._hoverOut}
         onMouseDown={this._onMouseDown}
         aria-selected={isSelected}
-        aria-label={marker.data.name}
+        aria-label={networkPayload.URI}
         role="option"
         id={`networkChartRowItem-${markerIndex}`}
       >
         <div className="networkChartRowItemLabel">
-          {this._splitsURI(marker.data.name)}
+          {this._splitsURI(networkPayload.URI)}
         </div>
         <NetworkChartRowBar
           marker={marker}

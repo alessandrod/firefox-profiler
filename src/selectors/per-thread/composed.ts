@@ -44,6 +44,7 @@ export type ComposedSelectorsPerThread = ReturnType<
 type NeededThreadSelectors = {
   getRawThread: Selector<RawThread>;
   getIsNetworkChartEmptyInFullRange: Selector<boolean>;
+  getIsShredHeatmapEmptyInFullRange: Selector<boolean>;
   getJsTracerTable: Selector<JsTracerTable | null>;
   getUserTimingMarkerTiming: Selector<MarkerTimingRows>;
   getStackTimingByDepth: Selector<StackTimingByDepth>;
@@ -64,8 +65,15 @@ export function getComposedSelectorsPerThread(
     getRawProfileSharedData,
     threadSelectors.getRawThread,
     threadSelectors.getIsNetworkChartEmptyInFullRange,
+    threadSelectors.getIsShredHeatmapEmptyInFullRange,
     threadSelectors.getJsTracerTable,
-    (shared, thread, isNetworkChartEmpty, jsTracerTable) => {
+    (
+      shared,
+      thread,
+      isNetworkChartEmpty,
+      isShredHeatmapEmpty,
+      jsTracerTable
+    ) => {
       if (thread.processType === 'comparison') {
         // For a diffing tracks, we display only the calltree tab for now, because
         // other views make no or not much sense.
@@ -77,6 +85,12 @@ export function getComposedSelectorsPerThread(
         // Don't show the network chart if it's empty.
         visibleTabs = visibleTabs.filter(
           (tabSlug) => tabSlug !== 'network-chart'
+        );
+      }
+
+      if (isShredHeatmapEmpty) {
+        visibleTabs = visibleTabs.filter(
+          (tabSlug) => tabSlug !== 'shred-heatmap'
         );
       }
 

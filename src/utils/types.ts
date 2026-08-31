@@ -45,6 +45,7 @@ export function toValidTabSlug(tabSlug: any): TabSlug | null {
     case 'stack-chart':
     case 'marker-chart':
     case 'network-chart':
+    case 'shred-heatmap':
     case 'marker-table':
     case 'flame-graph':
     case 'js-tracer':

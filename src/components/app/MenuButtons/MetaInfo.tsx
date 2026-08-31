@@ -641,6 +641,8 @@ function _formatDate(timestamp: number): string {
     weekday: 'short',
     hour: 'numeric',
     minute: 'numeric',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
   });
   return timestampDate;
 }

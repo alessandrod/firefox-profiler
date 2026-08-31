@@ -97,6 +97,43 @@ export const markerSchemaFrontEndOnly: MarkerSchema[] = [
       },
     ],
   },
+  {
+    name: 'ShredRecvRange',
+    display: [],
+    fields: [
+      { key: 'slot', label: 'Slot', format: 'integer' },
+      { key: 'startIndex', label: 'Start Index', format: 'integer' },
+      { key: 'endIndex', label: 'End Index', format: 'integer' },
+      { key: 'source', label: 'Source', format: 'string' },
+      { key: 'turbineLayer', label: 'Layer', format: 'string' },
+    ],
+  },
+  {
+    name: 'ShredFrontier',
+    display: [],
+    fields: [
+      { key: 'slot', label: 'Slot', format: 'integer' },
+      {
+        key: 'highestReceived',
+        label: 'Highest Received',
+        format: 'integer',
+      },
+      { key: 'consumed', label: 'Consumed', format: 'integer' },
+    ],
+  },
+  {
+    name: 'ShredGap',
+    display: ['marker-chart', 'marker-table', 'timeline-overview'],
+    tooltipLabel: 'Shred gap — slot {marker.data.slot}',
+    chartLabel: 'slot {marker.data.slot}',
+    tableLabel:
+      'slot {marker.data.slot} gap {marker.data.startIndex}..{marker.data.endIndex}',
+    fields: [
+      { key: 'slot', label: 'Slot', format: 'integer' },
+      { key: 'startIndex', label: 'Start Index', format: 'integer' },
+      { key: 'endIndex', label: 'End Index', format: 'integer' },
+    ],
+  },
 ];
 
 /**

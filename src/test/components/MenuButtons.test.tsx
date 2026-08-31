@@ -535,7 +535,7 @@ describe('app/MenuButtons', function () {
 
   describe('<MetaInfoPanel>', function () {
     async function setupForMetaInfoPanel(profile: Profile) {
-      jest
+      const toLocaleStringSpy = jest
         .spyOn(Date.prototype, 'toLocaleString')
         .mockImplementation(function (this: Date) {
           return 'toLocaleString ' + this.toUTCString();
@@ -563,6 +563,7 @@ describe('app/MenuButtons', function () {
         ...setupResult,
         getMetaInfoPanel,
         displayMetaInfoPanel,
+        toLocaleStringSpy,
       };
     }
 
@@ -591,6 +592,22 @@ describe('app/MenuButtons', function () {
       /* eslint-disable-next-line jest-dom/prefer-to-have-text-content */
       expect(renderedCapacity.textContent).toBe('1GB');
       expect(getMetaInfoPanel()).toMatchSnapshot();
+    });
+
+    it('formats profile dates in UTC', async () => {
+      const profile = processGeckoProfile(createGeckoProfile());
+      const { displayMetaInfoPanel, toLocaleStringSpy } =
+        await setupForMetaInfoPanel(profile);
+
+      await displayMetaInfoPanel();
+
+      expect(toLocaleStringSpy).toHaveBeenCalledWith(
+        undefined,
+        expect.objectContaining({
+          timeZone: 'UTC',
+          timeZoneName: 'short',
+        })
+      );
     });
 
     it('matches the snapshot with device information', async () => {

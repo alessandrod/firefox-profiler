@@ -92,7 +92,7 @@ exports[`timeline/LocalTrack with a network track matches the snapshot of the ne
         class="timelineTrackNameButton"
         type="button"
       >
-        Network
+        Transactions
       </button>
       <button
         class="timelineTrackCloseButton"
@@ -190,26 +190,6 @@ Process: \\"tab\\" (222)"
         <div
           class="timelineTrackThread expanded"
         >
-          <div
-            style="display: contents;"
-          >
-            <div
-              class="timelineMarkers"
-              data-testid="TimelineMarkersJank"
-            >
-              <div
-                class="react-contextmenu-wrapper"
-              >
-                <div>
-                  <canvas
-                    class="timelineMarkersCanvas"
-                    height="400"
-                    width="400"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
           <div
             style="display: contents;"
           >

@@ -117,7 +117,7 @@ describe('timeline/LocalTrack', function () {
   describe('with a network track', function () {
     it('has correctly renders the network label', function () {
       const { getLocalTrackLabel } = setupWithNetworkProfile();
-      expect(getLocalTrackLabel()).toHaveTextContent('Network');
+      expect(getLocalTrackLabel()).toHaveTextContent('Transactions');
     });
 
     it('matches the snapshot of the network track', () => {

@@ -7,6 +7,7 @@ import { stripIndent } from 'common-tags';
 import * as UrlState from '../url-state';
 import * as MarkerData from '../../profile-logic/marker-data';
 import * as MarkerTimingLogic from '../../profile-logic/marker-timing';
+import * as Shreds from '../../profile-logic/shreds';
 import * as ProfileSelectors from '../profile';
 import { getRightClickedMarkerInfo } from '../right-clicked-marker';
 import {
@@ -36,6 +37,11 @@ import type {
   IndexIntoStringTable,
   State,
 } from 'firefox-profiler/types';
+import type {
+  PackedShredHeatmap,
+  ShredFrontierSample,
+  ShredRecvRange,
+} from '../../profile-logic/shreds';
 
 /**
  * Infer the return type from the getMarkerSelectorsPerThread function. This
@@ -303,6 +309,11 @@ export function getMarkerSelectorsPerThread(
     (markers) => markers.every((marker) => !MarkerData.isNetworkMarker(marker))
   );
 
+  const getIsShredHeatmapEmptyInFullRange: Selector<boolean> = createSelector(
+    getFullMarkerList,
+    (markers) => markers.every((marker) => !Shreds.isShredMarker(marker))
+  );
+
   /**
    * This selector filters network markers from the range filtered markers.
    */
@@ -316,6 +327,81 @@ export function getMarkerSelectorsPerThread(
     getMarkerGetter,
     getCommittedRangeFilteredMarkerIndexes,
     filterMarkerIndexesCreator(MarkerData.isUserTimingMarker)
+  );
+
+  const getShredRecvRangeMarkerIndexes: Selector<MarkerIndex[]> =
+    createSelector(
+      getMarkerGetter,
+      getCommittedRangeFilteredMarkerIndexes,
+      filterMarkerIndexesCreator(
+        (marker) => marker.data?.type === 'ShredRecvRange'
+      )
+    );
+
+  const getShredFrontierMarkerIndexes: Selector<MarkerIndex[]> = createSelector(
+    getMarkerGetter,
+    getCommittedRangeFilteredMarkerIndexes,
+    filterMarkerIndexesCreator(
+      (marker) => marker.data?.type === 'ShredFrontier'
+    )
+  );
+
+  const getShredGapMarkerIndexes: Selector<MarkerIndex[]> = createSelector(
+    getMarkerGetter,
+    getCommittedRangeFilteredMarkerIndexes,
+    filterMarkerIndexesCreator((marker) => marker.data?.type === 'ShredGap')
+  );
+
+  const getFullRangeShredRecvRangeMarkerIndexes: Selector<MarkerIndex[]> =
+    createSelector(
+      getMarkerGetter,
+      getFullMarkerListIndexes,
+      filterMarkerIndexesCreator(
+        (marker) => marker.data?.type === 'ShredRecvRange'
+      )
+    );
+
+  const getFullRangeShredFrontierMarkerIndexes: Selector<MarkerIndex[]> =
+    createSelector(
+      getMarkerGetter,
+      getFullMarkerListIndexes,
+      filterMarkerIndexesCreator(
+        (marker) => marker.data?.type === 'ShredFrontier'
+      )
+    );
+
+  const getFullRangeShredGapMarkerIndexes: Selector<MarkerIndex[]> =
+    createSelector(
+      getMarkerGetter,
+      getFullMarkerListIndexes,
+      filterMarkerIndexesCreator((marker) => marker.data?.type === 'ShredGap')
+    );
+
+  const getShredRecvRanges: Selector<ShredRecvRange[]> = createSelector(
+    getMarkerGetter,
+    getFullRangeShredRecvRangeMarkerIndexes,
+    Shreds.collectShredRecvRanges
+  );
+
+  const getShredFrontierSamples: Selector<ShredFrontierSample[]> =
+    createSelector(
+      getMarkerGetter,
+      getFullRangeShredFrontierMarkerIndexes,
+      Shreds.collectShredFrontierSamples
+    );
+
+  const getShredGapTrack = createSelector(
+    getMarkerGetter,
+    getFullRangeShredGapMarkerIndexes,
+    Shreds.collectShredGapEpisodes
+  );
+
+  const getShredHeatmap: Selector<PackedShredHeatmap> = createSelector(
+    getShredRecvRanges,
+    getShredFrontierSamples,
+    getShredGapTrack,
+    ProfileSelectors.getPreviewSelectionRange,
+    Shreds.buildShredHeatmap
   );
 
   /**
@@ -805,6 +891,13 @@ export function getMarkerSelectorsPerThread(
     getSelectedNetworkMarkerIndex,
     getSelectedNetworkMarker,
     getIsNetworkChartEmptyInFullRange,
+    getIsShredHeatmapEmptyInFullRange,
+    getShredRecvRangeMarkerIndexes,
+    getShredFrontierMarkerIndexes,
+    getShredGapMarkerIndexes,
+    getShredRecvRanges,
+    getShredFrontierSamples,
+    getShredHeatmap,
     getUserTimingMarkerIndexes,
     getUserTimingMarkerTiming,
     getRightClickedMarkerIndex,

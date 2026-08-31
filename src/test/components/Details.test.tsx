@@ -35,6 +35,9 @@ jest.mock('../../components/marker-table', () => ({
 jest.mock('../../components/network-chart', () => ({
   NetworkChart: 'network-chart',
 }));
+jest.mock('../../components/shred-heatmap', () => ({
+  ShredHeatmap: 'shred-heatmap',
+}));
 jest.mock('../../components/js-tracer', () => ({
   JsTracer: 'js-tracer',
 }));

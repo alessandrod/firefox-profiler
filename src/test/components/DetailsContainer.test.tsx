@@ -42,6 +42,7 @@ describe('app/DetailsContainer', function () {
     'marker-chart': false,
     'marker-table': true,
     'network-chart': false,
+    'shred-heatmap': false,
     'js-tracer': false,
   };
 

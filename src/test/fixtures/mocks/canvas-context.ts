@@ -28,6 +28,7 @@ export function autoMockCanvasContext() {
 }
 
 export type BeginPathOperation = ['beginPath'];
+export type ClosePathOperation = ['closePath'];
 export type MoveToOperation = ['moveTo', number, number];
 export type LineToOperation = ['lineTo', number, number];
 export type RectOperation = ['rect', number, number, number, number];
@@ -36,15 +37,7 @@ export type FillRectOperation = ['fillRect', number, number, number, number];
 export type ClearRectOperation = ['clearRect', number, number, number, number];
 export type FillTextOperation = ['fillText', string];
 
-export type DrawOperation =
-  | BeginPathOperation
-  | MoveToOperation
-  | LineToOperation
-  | RectOperation
-  | SetFillStyleOperation
-  | FillRectOperation
-  | ClearRectOperation
-  | FillTextOperation;
+export type DrawOperation = any[];
 
 export function flushDrawLog(): DrawOperation[] {
   return (window as any).__flushDrawLog();
@@ -95,8 +88,11 @@ function mockCanvasContext() {
       moveTo: spyLog('moveTo'),
       lineTo: spyLog('lineTo'),
       stroke: spyLog('stroke'),
+      strokeRect: spyLog('strokeRect'),
       rect: spyLog('rect'),
       arc: spyLog('arc'),
+      setLineDash: spyLog('setLineDash'),
+      setTransform: spyLog('setTransform'),
       measureText: spyLog('measureText', (text: string) => ({
         width: text.length * 5,
       })),

@@ -423,6 +423,81 @@ Object {
         ],
         "name": "MarkerWithHiddenField",
       },
+      Object {
+        "display": Array [],
+        "fields": Array [
+          Object {
+            "format": "integer",
+            "key": "slot",
+            "label": "Slot",
+          },
+          Object {
+            "format": "integer",
+            "key": "startIndex",
+            "label": "Start Index",
+          },
+          Object {
+            "format": "integer",
+            "key": "endIndex",
+            "label": "End Index",
+          },
+          Object {
+            "format": "string",
+            "key": "source",
+            "label": "Source",
+          },
+        ],
+        "name": "ShredRecvRange",
+      },
+      Object {
+        "display": Array [],
+        "fields": Array [
+          Object {
+            "format": "integer",
+            "key": "slot",
+            "label": "Slot",
+          },
+          Object {
+            "format": "integer",
+            "key": "highestReceived",
+            "label": "Highest Received",
+          },
+          Object {
+            "format": "integer",
+            "key": "consumed",
+            "label": "Consumed",
+          },
+        ],
+        "name": "ShredFrontier",
+      },
+      Object {
+        "chartLabel": "slot {marker.data.slot}",
+        "display": Array [
+          "marker-chart",
+          "marker-table",
+          "timeline-overview",
+        ],
+        "fields": Array [
+          Object {
+            "format": "integer",
+            "key": "slot",
+            "label": "Slot",
+          },
+          Object {
+            "format": "integer",
+            "key": "startIndex",
+            "label": "Start Index",
+          },
+          Object {
+            "format": "integer",
+            "key": "endIndex",
+            "label": "End Index",
+          },
+        ],
+        "name": "ShredGap",
+        "tableLabel": "slot {marker.data.slot} gap {marker.data.startIndex}..{marker.data.endIndex}",
+        "tooltipLabel": "Shred gap — slot {marker.data.slot}",
+      },
     ],
     "misc": "",
     "oscpu": "",
@@ -1673,7 +1748,7 @@ Array [
     ],
     "instantOnly": false,
     "length": 2,
-    "name": "Network Requests",
+    "name": "Transactions",
     "start": Array [
       6,
       7,

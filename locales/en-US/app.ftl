@@ -944,6 +944,7 @@ TabBar--stack-chart-tab = Stack Chart
 TabBar--marker-chart-tab = Marker Chart
 TabBar--marker-table-tab = Marker Table
 TabBar--network-tab = Transactions
+TabBar--shreds-tab = Shreds
 TabBar--js-tracer-tab = JS Tracer
 
 ## TabSelectorMenu
