@@ -199,11 +199,11 @@ export function getMarkerSelectorsPerThread(
    */
   const filterMarkerIndexesCreator =
     (filterFunc: (param: Marker) => boolean) =>
-      (
-        getMarker: (param: MarkerIndex) => Marker,
-        markerIndexes: MarkerIndex[]
-      ): MarkerIndex[] =>
-        MarkerData.filterMarkerIndexes(getMarker, markerIndexes, filterFunc);
+    (
+      getMarker: (param: MarkerIndex) => Marker,
+      markerIndexes: MarkerIndex[]
+    ): MarkerIndex[] =>
+      MarkerData.filterMarkerIndexes(getMarker, markerIndexes, filterFunc);
 
   /**
    * This selector applies the committed range to the full list of markers.

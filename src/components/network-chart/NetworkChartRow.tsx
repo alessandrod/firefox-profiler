@@ -442,7 +442,7 @@ export class NetworkChartRow extends React.PureComponent<
     const { networkPayload } = this.props;
     const mimeType =
       networkPayload.contentType === undefined ||
-        networkPayload.contentType === null
+      networkPayload.contentType === null
         ? guessMimeTypeFromNetworkMarker(networkPayload)
         : networkPayload.contentType;
     return getColorClassNameForMimeType(mimeType);

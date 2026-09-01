@@ -124,9 +124,7 @@ const lastVisibleThreadTabSlug: Reducer<TabSlug> = (
   switch (action.type) {
     case 'SELECT_TRACK':
     case 'CHANGE_SELECTED_TAB':
-      if (
-        action.selectedTab !== 'network-chart'
-      ) {
+      if (action.selectedTab !== 'network-chart') {
         return action.selectedTab;
       }
       return state;

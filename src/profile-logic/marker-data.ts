@@ -970,7 +970,7 @@ export function deriveMarkersFromRawMarkerTable(
       const start = ensureExists(
         rawMarkers.startTime[startIndex],
         'Encountered a marker without a startTime. Eventually this needs to be handled ' +
-        'for phase-style markers.'
+          'for phase-style markers.'
       );
       addMarker([startIndex], {
         start,

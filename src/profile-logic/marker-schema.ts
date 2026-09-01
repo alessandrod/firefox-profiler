@@ -123,7 +123,7 @@ export const markerSchemaFrontEndOnly: MarkerSchema[] = [
   },
   {
     name: 'ShredGap',
-    display: ['marker-chart', 'marker-table', 'timeline-overview'],
+    display: [],
     tooltipLabel: 'Shred gap — slot {marker.data.slot}',
     chartLabel: 'slot {marker.data.slot}',
     tableLabel:

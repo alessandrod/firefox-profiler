@@ -5,6 +5,8 @@
 import {
   getScreenshotTrackProfile,
   getNetworkTrackProfile,
+  getNetworkMarkers,
+  addMarkersToThreadWithCorrespondingSamples,
   addIPCMarkerPairToThreads,
   getProfileWithMarkers,
   getProfileFromTextSamples,
@@ -594,6 +596,37 @@ describe('ordering and hiding', function () {
   });
 
   describe('local tracks', function () {
+    it('creates one network track per process', function () {
+      const { profile } = getProfileFromTextSamples('A', 'B', 'C', 'D');
+      const pids = ['1', '1', '2', '2'];
+
+      for (
+        let threadIndex = 0;
+        threadIndex < profile.threads.length;
+        threadIndex++
+      ) {
+        const thread = profile.threads[threadIndex];
+        thread.pid = pids[threadIndex];
+        thread.isMainThread = threadIndex % 2 === 0;
+        addMarkersToThreadWithCorrespondingSamples(
+          thread,
+          profile.shared,
+          getNetworkMarkers({ id: threadIndex })
+        );
+      }
+
+      const { getState } = storeWithProfile(profile);
+      const localTracksByPid =
+        ProfileViewSelectors.getLocalTracksByPid(getState());
+
+      expect(
+        localTracksByPid.get('1')?.filter((track) => track.type === 'network')
+      ).toEqual([{ type: 'network', threadIndex: 0 }]);
+      expect(
+        localTracksByPid.get('2')?.filter((track) => track.type === 'network')
+      ).toEqual([{ type: 'network', threadIndex: 2 }]);
+    });
+
     it('can define custom local tracks from marker graphs', function () {
       const { getState } = storeWithProfile(getProfileWithCustomMarkerTracks());
       expect(getHumanReadableTracks(getState())).toEqual([

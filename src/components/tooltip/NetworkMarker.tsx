@@ -130,7 +130,7 @@ export class TooltipNetworkMarkerPhases extends React.PureComponent<Props> {
 
     for (let i = 1; i < properties.length; i++) {
       const { phase: previousProperty, value: startValue } = properties[i - 1];
-      if (i == 1) {
+      if (i === 1) {
         console.log('first phase', previousProperty, startValue);
       }
       const { value: endValue } = properties[i];

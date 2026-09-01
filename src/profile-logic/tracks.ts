@@ -317,6 +317,7 @@ export function computeLocalTracksByPid(
   availableGlobalTracks: GlobalTrack[]
 ): Map<Pid, LocalTrack[]> {
   const localTracksByPid = new Map<Pid, LocalTrack[]>();
+  const pidsWithNetworkTracks = new Set<Pid>();
 
   // Create a new set of available pids, so we can filter out the local tracks
   // if their globalTracks are also filtered out by the tab selector.
@@ -367,12 +368,15 @@ export function computeLocalTracksByPid(
     }
 
     if (
+      !pidsWithNetworkTracks.has(pid) &&
       markers.data.some(
         (datum) => datum && networkTimelineMarkerTypes.has(datum.type)
       )
     ) {
-      // This thread has network markers.
+      // Network tracks represent the process, even though their markers are
+      // provided by a thread.
       tracks.push({ type: 'network', threadIndex });
+      pidsWithNetworkTracks.add(pid);
     }
 
     if (

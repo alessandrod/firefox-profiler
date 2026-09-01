@@ -1464,14 +1464,8 @@ function _getShredRawMarkers(
 
   rawMarkers.sort(
     (a, b) =>
-      ensureExists(
-        a.startTime ?? a.endTime,
-        'Expected shred marker time'
-      ) -
-        ensureExists(
-          b.startTime ?? b.endTime,
-          'Expected shred marker time'
-        ) ||
+      ensureExists(a.startTime ?? a.endTime, 'Expected shred marker time') -
+        ensureExists(b.startTime ?? b.endTime, 'Expected shred marker time') ||
       a.phase - b.phase
   );
 
@@ -1495,7 +1489,11 @@ export function getShredTrackProfile(): Profile {
     _materializeRealShredSlotDefinition
   );
 
-  addRawMarkersToThread(thread, profile.shared, _getShredRawMarkers(slotDefinitions));
+  addRawMarkersToThread(
+    thread,
+    profile.shared,
+    _getShredRawMarkers(slotDefinitions)
+  );
   profile.threads = [thread];
   return profile;
 }
